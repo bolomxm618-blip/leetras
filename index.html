@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAMUKOS CUP | Generador de Letras</title>
+
+<style>
+:root {
+    --bg: #090b11;
+    --panel: rgba(13, 17, 29, 0.88);
+    --border: rgba(150, 165, 200, 0.19);
+    --text: #f5f6fa;
+    --muted: #a0a9bd;
+    --accent: #836bff;
+    --accent2: #38d9f5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    font-family: Arial, sans-serif;
+
+    background-image:
+        linear-gradient(
+            rgba(0, 0, 0, 0.48),
+            rgba(0, 0, 0, 0.68)
+        ),
+        url("fondo.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+header {
+    padding: 22px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    background: rgba(0, 0, 0, 0.55);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--accent2);
+}
+
+.tag {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+main {
+    max-width: 1150px;
+    margin: auto;
+    padding: 48px 20px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 6vw, 58px);
+    letter-spacing: -2px;
+    margin: 0 0 14px;
+}
+
+.hero h1 span {
+    color: var(--accent2);
+}
+
+.hero p {
+    color: #d0d5e0;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.editor {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(15px);
+}
+
+.editor label {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 13px;
+    letter-spacing: 1px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 125px;
+    resize: vertical;
+    padding: 18px;
+
+    background: rgba(4, 8, 17, 0.85);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    color: white;
+    font-size: 20px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: var(--accent2);
+}
+
+.editor-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+small {
+    color: var(--muted);
+}
+
+.clear {
+    background: #252a39;
+    color: white;
+    padding: 11px 17px;
+    border-radius: 10px;
+}
+
+.clear:hover {
+    background: #363e53;
+}
+
+.controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.search {
+    flex: 1;
+    min-width: 190px;
+    padding: 14px;
+
+    color: white;
+    background: rgba(13, 17, 29, 0.92);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    outline: none;
+}
+
+.filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter {
+    padding: 12px 15px;
+    color: #b7bfd1;
+    background: #1c2130;
+    border-radius: 10px;
+}
+
+.filter.active {
+    color: white;
+    background: var(--accent);
+}
+
+.result-info {
+    color: #d3d8e5;
+    font-size: 13px;
+    margin-bottom: 17px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.card {
+    min-width: 0;
+    padding: 21px;
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    backdrop-filter: blur(15px);
+
+    transition: 0.2s;
+}
+
+.card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-2px);
+}
+
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.card-name {
+    color: #b7c1d6;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.star {
+    color: #7c879e;
+    background: transparent;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.star.saved {
+    color: #ffd166;
+}
+
+.preview {
+    font-size: 23px;
+    line-height: 1.6;
+    min-height: 78px;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.copy {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+
+    color: #d4caff;
+    background: #29243e;
+    font-weight: bold;
+}
+
+.copy:hover {
+    background: var(--accent);
+    color: white;
+}
+
+.copy.done {
+    color: #a1ffe1;
+    background: #125c46;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    padding: 40px;
+    text-align: center;
+    color: var(--muted);
+    background: var(--panel);
+    border-radius: 15px;
+}
+
+footer {
+    padding: 35px 15px;
+    color: #b0b8ca;
+    text-align: center;
+    font-size: 12px;
+}
+
+@media (max-width: 650px) {
+    header {
+        padding: 18px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .tag {
+        font-size: 10px;
+    }
+
+    main {
+        padding: 30px 14px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        letter-spacing: -1px;
+    }
+
+    .editor {
+        padding: 17px;
+    }
+}
+
+/* ADMINISTRADOR DE TORNEOS */
+.nav-tabs{display:flex;gap:12px;flex-wrap:wrap}.nav-tab{background:#1b253b;color:white;border:1px solid #375279;border-radius:12px;padding:12px 18px;font-weight:bold}.nav-tab.active{background:#0879c5;border-color:#36d7ff}.tournament-section{display:none}.tournament-section.active{display:block}.font-section.hidden{display:none}.tourney-panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:22px;margin:18px 0;backdrop-filter:blur(14px)}.tourney-panel h2{margin-top:0}.team-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.team-field label{display:block;color:#b5c6e8;font-size:12px;margin-bottom:6px}.team-field input,.tourney-select{width:100%;min-width:0;padding:12px;background:#080e1b;color:white;border:1px solid #3a527c;border-radius:9px}.round-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.match-card{background:#080e1c;border:1px solid #344a6d;padding:14px;border-radius:12px}.match-card strong{display:block;margin-bottom:10px;color:#55ceff}.match-card button{width:100%;display:block;text-align:left;padding:10px;margin-top:7px;background:#182943;color:white;border:1px solid #324b71;border-radius:8px;overflow-wrap:anywhere}.match-card button.selected{background:#0877b9;border-color:#5de3ff}.match-card button:disabled{opacity:.45;cursor:not-allowed}.tourney-actions{display:flex;gap:12px;flex-wrap:wrap}.tourney-actions button{padding:13px 20px;border-radius:10px;color:white;background:#086fb3;font-weight:bold}.tourney-actions button.secondary{background:#333a4d}.bracket-preview{width:100%;height:auto;display:block;border-radius:12px;background:#050910}.tourney-note{color:#b8c5dc;line-height:1.5}.champion{font-size:24px;font-weight:900;color:#ffd36c;text-align:center;margin:15px 0}.tourney-error{color:#ffbd8c}.tourney-success{color:#8dffcc}@media(max-width:650px){.team-grid,.round-grid{grid-template-columns:1fr}.tourney-panel{padding:15px}}
+
+/* ACCESO CHAMUKOS CUP */
+body.login-locked{overflow:hidden;background:#030817}
+#app-screen{display:none}
+body:not(.login-locked) #app-screen{display:block}
+body:not(.login-locked){background-image:linear-gradient(rgba(0,0,0,.48),rgba(0,0,0,.68)),url("fondo.png")}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;background:linear-gradient(125deg,rgba(1,5,18,.46),rgba(1,9,28,.68)),url("fondo2.png") center/cover no-repeat;font-family:Arial,sans-serif}
+#login-screen.is-hidden{display:none}
+.login-panel{width:min(440px,100%);position:relative;overflow:hidden;border:1px solid rgba(65,183,255,.6);border-radius:24px;padding:30px;background:linear-gradient(160deg,rgba(9,19,39,.95),rgba(3,8,22,.93));box-shadow:0 0 65px rgba(0,118,255,.25),0 28px 90px rgba(0,0,0,.7);backdrop-filter:blur(18px)}
+.login-panel:before{content:"";position:absolute;top:0;left:18%;right:18%;height:3px;background:linear-gradient(90deg,transparent,#20c8ff,transparent);box-shadow:0 0 20px #20c8ff}
+.login-logo{display:block;width:118px;height:118px;object-fit:cover;margin:4px auto 18px;border-radius:50%;border:2px solid #42d7ff;box-shadow:0 0 0 7px rgba(37,152,255,.12),0 0 35px rgba(0,145,255,.5)}
+.login-title{text-align:center;font-size:31px;font-weight:900;letter-spacing:2px;margin:0}.login-title span{color:#38cfff}.login-sub{text-align:center;color:#aabdd8;font-size:12px;letter-spacing:2px;margin:12px 0 30px}.login-label{display:block;color:#c8dcfa;font-size:12px;font-weight:700;letter-spacing:1px;margin:17px 0 8px}.login-input-wrap{position:relative}.login-input{width:100%;padding:15px 48px 15px 15px;background:#071126;border:1px solid #2d527f;color:#fff;border-radius:11px;outline:none}.login-input:focus{border-color:#43d9ff;box-shadow:0 0 0 3px rgba(39,187,255,.12)}.login-eye{position:absolute;right:7px;top:6px;padding:9px;background:transparent;color:#a9c8e8;font-size:19px}.login-submit{width:100%;margin-top:25px;padding:15px;border-radius:12px;background:linear-gradient(110deg,#005dd5,#02b4ec);color:white;font-size:15px;font-weight:900;letter-spacing:1px;box-shadow:0 8px 25px rgba(0,122,255,.3)}.login-submit:hover{filter:brightness(1.15)}.login-error{min-height:20px;text-align:center;color:#ff9eab;font-size:13px;margin:12px 0 0}.login-footer{text-align:center;color:#7790b1;font-size:11px;margin-top:15px}.logout-btn{background:#1c314f;color:#cbe8ff;border:1px solid #3e7aaf;border-radius:11px;padding:12px 16px;font-weight:bold}.logout-btn:hover{background:#28517e}
+@media(max-width:520px){.login-panel{padding:24px 18px}.login-title{font-size:26px}}
+
+
+/* LOGIN SIN PANEL: pantalla completa y fondo visible */
+html,body{margin:0;width:100%;min-height:100%}
+body.login-locked{overflow:hidden}
+#login-screen{
+ position:fixed;inset:0;width:100%;height:100vh;height:100dvh;min-height:0;
+ padding:24px 16px;overflow-y:auto;z-index:9999;
+ background:url("fondo2.png") center center/cover no-repeat;
+ display:flex;align-items:center;justify-content:center;
+ border:0;border-radius:0;
+}
+#login-screen.is-hidden{display:none}
+#login-screen .login-panel{
+ width:min(420px,100%);padding:20px 12px;margin:auto;
+ background:transparent;border:0;border-radius:0;
+ box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+ overflow:visible;
+}
+#login-screen .login-panel::before{display:none}
+#login-screen .login-logo{width:132px;height:132px;object-fit:cover}
+#login-screen .login-title,#login-screen .login-sub,#login-screen .login-label,#login-screen .login-footer{
+ text-shadow:0 2px 10px rgba(0,0,0,.95),0 0 20px rgba(0,0,0,.85);
+}
+#login-screen .login-input{background:rgba(3,9,23,.68);backdrop-filter:blur(3px)}
+@media(max-height:640px){#login-screen{align-items:flex-start}#login-screen .login-logo{width:88px;height:88px;margin-bottom:10px}#login-screen .login-sub{margin-bottom:14px}#login-screen .login-panel{padding:8px 12px}}
+
+</style>
+</head>
+
+<body class="login-locked">
+
+<div id="login-screen" aria-label="Página de inicio de sesión CHAMUKOS CUP">
+ <div class="login-panel">
+  <img src="fondo.png" alt="Logo CHAMUKOS CUP" class="login-logo" onerror="this.style.visibility='hidden'">
+  <h1 class="login-title">CHAMUKOS <span>CUP</span></h1>
+  <p class="login-sub">ACCESO EXCLUSIVO · ADMINISTRACIÓN</p>
+  <form id="login-form" autocomplete="off">
+   <label class="login-label" for="login-user">USUARIO</label>
+   <div class="login-input-wrap"><input class="login-input" id="login-user" placeholder="Escribe tu usuario" autocomplete="username" required></div>
+   <label class="login-label" for="login-pass">CONTRASEÑA</label>
+   <div class="login-input-wrap"><input class="login-input" id="login-pass" type="password" placeholder="Escribe tu contraseña" autocomplete="current-password" required><button class="login-eye" type="button" id="login-eye" aria-label="Mostrar contraseña">◉</button></div>
+   <button class="login-submit" type="submit">ENTRAR AL PANEL →</button>
+   <p class="login-error" id="login-error" aria-live="polite"></p>
+  </form>
+  <p class="login-footer">CHAMUKOS CUP · PANEL PRIVADO</p>
+ </div>
+</div>
+
+
+<div id="app-screen">
+<header>
+    <div class="logo">
+        CHAMUKOS <span>CUP</span>
+    </div>
+
+    <nav class="nav-tabs"><button class="nav-tab active" data-view="fonts">Generador de letras</button><button class="nav-tab" data-view="tournament">Gestionar torneo</button></nav>
+    <button class="logout-btn" id="logout-btn" type="button">Cerrar sesión</button>
+</header>
+
+<main>
+<div id="fonts-view" class="font-section">
+
+    <section class="hero">
+        <h1>
+            Tu texto, <span>tu estilo.</span>
+        </h1>
+
+        <p>
+            Escribe una vez y descubre diferentes tipos de letras.
+            <br>
+            Copia y pega en WhatsApp, Discord, Free Fire y más.
+        </p>
+    </section>
+
+    <section class="editor">
+        <label for="text">
+            ESCRIBE TU TEXTO
+        </label>
+
+        <textarea
+            id="text"
+            placeholder="Escribe algo aquí..."
+        >CHAMUKOS CUP</textarea>
+
+        <div class="editor-bottom">
+            <small id="counter">
+                0 caracteres
+            </small>
+
+            <button class="clear" id="clear">
+                Limpiar texto
+            </button>
+        </div>
+    </section>
+
+    <section class="controls">
+
+        <input
+            class="search"
+            id="search"
+            placeholder="Buscar tipo de letra..."
+        >
+
+        <div class="filters">
+            <button
+                class="filter active"
+                data-filter="all"
+            >
+                Todos
+            </button>
+
+            <button
+                class="filter"
+                data-filter="fav"
+            >
+                Favoritos
+            </button>
+        </div>
+
+    </section>
+
+    <div class="result-info" id="count"></div>
+
+    <section class="grid" id="results"></section>
+</div>
+<div id="tournament-view" class="tournament-section">
+<section class="hero"><h1>CHAMUKOS <span>CUP</span></h1><p>Escribe los 8 equipos, elige quién avanza y descarga tu plantilla con los resultados.</p></section>
+<section class="tourney-panel"><h2>1. Equipos participantes (8)</h2><div class="team-grid" id="team-fields"></div></section>
+<section class="tourney-panel"><h2>2. Cuartos de final — 8 equipos</h2><p class="tourney-note">Selecciona el ganador de cada partido para llevarlo a semifinales.</p><div class="round-grid" id="quarter-matches"></div></section>
+<section class="tourney-panel"><h2>3. Semifinales — 4 equipos</h2><div class="round-grid" id="semi-matches"></div></section>
+<section class="tourney-panel"><h2>4. Final — 2 equipos</h2><div class="round-grid" id="final-match"></div></section>
+<section class="tourney-panel"><h2>5. 🏆 Ganador del torneo</h2><p class="tourney-note">Selecciona el ganador de la final arriba. Su nombre aparecerá automáticamente en la casilla dorada. También puedes editar cómo se escribe aquí.</p><div class="champion" id="champion-name">Campeón: pendiente</div><div class="team-field"><label for="champion-custom">NOMBRE DEL CAMPEÓN EN LA IMAGEN</label><input id="champion-custom" type="text" maxlength="36" placeholder="Elige al ganador de la final o escribe su nombre"></div></section>
+<section class="tourney-panel"><h2>6. Plantilla del torneo</h2><p class="tourney-note">Los nombres aparecen directamente en las casillas de tu imagen original. El archivo PNG descargado tendrá estos mismos resultados.</p><label for="bracket-font">Letra de la plantilla:</label> <select id="bracket-font" class="tourney-select" style="max-width:320px"><option value="bold">Negrita</option><option value="serif">Clásica</option><option value="italic">Inclinada</option></select><div style="height:15px"></div><canvas id="bracket-canvas" class="bracket-preview" width="1648" height="928"></canvas><p id="tourney-status" class="tourney-note" aria-live="polite"></p><div class="tourney-actions"><button id="download-bracket">Descargar imagen PNG</button><button id="reset-bracket" class="secondary">Reiniciar torneo</button></div></section>
+</div>
+
+</main>
+
+<footer>
+    CHAMUKOS CUP — Generador de Letras
+</footer>
+</div>
+
+<script>
+"use strict";
+
+/* ==========================================
+   CHAMUKOS CUP - 4 ESTILOS DE LETRAS
+========================================== */
+
+const styles = [
+  {name:"01. Negrita clásica",type:"bold"},
+  {name:"Fraktur (Gothic/Old English)",type:"fraktur"},
+  {name:"Fraktur (Gothic/Old English) Bold",type:"boldFraktur"},
+  {name:"Bold",type:"bold"},
+  {name:"Italic Bold",type:"boldItalic"},
+  {name:"02. Negrita moderna",type:"sansBold"},
+  {name:"03. Gaming inclinada",type:"sansBoldItalic"},
+  {name:"04. Cursiva negrita",type:"boldItalic"},
+  {name:"05. Cursiva fina",type:"italic"},
+  {name:"06. Itálica moderna",type:"sansItalic"},
+  {name:"07. Gótica clásica",type:"fraktur"},
+  {name:"08. Gótica oscura",type:"boldFraktur"},
+  {name:"09. Manuscrita elegante",type:"script"},
+  {name:"10. Manuscrita gruesa",type:"boldScript"},
+  {name:"11. Doble trazo",type:"double"},
+  {name:"12. Monoespaciada",type:"mono"},
+  {name:"13. Moderna fina",type:"sans"},
+  {name:"14. Versalitas",type:"small"},
+  {name:"15. Letras superiores",type:"super"},
+  {name:"16. Letras inferiores",type:"sub"},
+  {name:"17. Ancho completo",type:"fullwidth"},
+  {name:"18. Letras circulares",type:"circled"},
+  {name:"19. Círculos negros",type:"negativeCircled"},
+  {name:"20. Letras cuadradas",type:"squared"},
+  {name:"21. Cuadrados oscuros",type:"negativeSquared"},
+  {name:"22. Serif invertida",type:"turned"},
+  {name:"23. Texto invertido",type:"upsideDown"},
+  {name:"24. Letras espaciadas",type:"spaced"},
+  {name:"25. Letras muy espaciadas",type:"wideSpaced"},
+  {name:"26. Texto compacto",type:"compact"},
+  {name:"27. Letras subrayadas",type:"underline"},
+  {name:"28. Letras con doble línea",type:"doubleUnderline"},
+  {name:"29. Letras tachadas",type:"strike"},
+  {name:"30. Letras superiores en mayúsculas",type:"superCaps"}
+];
+
+const ranges = {
+  bold:[0x1D400,0x1D41A,0x1D7CE],
+  sansBold:[0x1D5D4,0x1D5EE,0x1D7EC],
+  sansBoldItalic:[0x1D63C,0x1D656,null],
+  boldItalic:[0x1D468,0x1D482,null],
+  italic:[0x1D434,0x1D44E,null],
+  sansItalic:[0x1D608,0x1D622,null],
+  fraktur:[0x1D504,0x1D51E,null],
+  boldFraktur:[0x1D56C,0x1D586,null],
+  script:[0x1D49C,0x1D4B6,null],
+  boldScript:[0x1D4D0,0x1D4EA,null],
+  double:[0x1D538,0x1D552,0x1D7D8],
+  mono:[0x1D670,0x1D68A,0x1D7F6],
+  sans:[0x1D5A0,0x1D5BA,0x1D7E2]
+};
+
+const exceptions = {
+  italic:{h:"ℎ"},
+  fraktur:{C:"ℭ",H:"ℌ",I:"ℑ",R:"ℜ",Z:"ℨ"},
+  script:{
+    B:"ℬ",E:"ℰ",F:"ℱ",H:"ℋ",
+    I:"ℐ",L:"ℒ",M:"ℳ",R:"ℛ",
+    e:"ℯ",g:"ℊ",o:"ℴ"
+  },
+  double:{
+    C:"ℂ",H:"ℍ",N:"ℕ",P:"ℙ",
+    Q:"ℚ",R:"ℝ",Z:"ℤ"
+  }
+};
+
+const upper="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const lower="abcdefghijklmnopqrstuvwxyz";
+const digits="0123456789";
+
+const small={
+  a:"ᴀ",b:"ʙ",c:"ᴄ",d:"ᴅ",e:"ᴇ",
+  f:"ꜰ",g:"ɢ",h:"ʜ",i:"ɪ",j:"ᴊ",
+  k:"ᴋ",l:"ʟ",m:"ᴍ",n:"ɴ",
+  o:"ᴏ",p:"ᴘ",q:"ǫ",r:"ʀ",
+  s:"ꜱ",t:"ᴛ",u:"ᴜ",v:"ᴠ",
+  w:"ᴡ",x:"x",y:"ʏ",z:"ᴢ"
+};
+
+const superLetters={
+  a:"ᵃ",b:"ᵇ",c:"ᶜ",d:"ᵈ",e:"ᵉ",
+  f:"ᶠ",g:"ᵍ",h:"ʰ",i:"ⁱ",j:"ʲ",
+  k:"ᵏ",l:"ˡ",m:"ᵐ",n:"ⁿ",o:"ᵒ",
+  p:"ᵖ",q:"q",r:"ʳ",s:"ˢ",t:"ᵗ",
+  u:"ᵘ",v:"ᵛ",w:"ʷ",x:"ˣ",
+  y:"ʸ",z:"ᶻ"
+};
+
+const superCaps={
+  A:"ᴬ",B:"ᴮ",C:"ᶜ",D:"ᴰ",E:"ᴱ",
+  F:"ᶠ",G:"ᴳ",H:"ᴴ",I:"ᴵ",J:"ᴶ",
+  K:"ᴷ",L:"ᴸ",M:"ᴹ",N:"ᴺ",O:"ᴼ",
+  P:"ᴾ",Q:"Q",R:"ᴿ",S:"ˢ",T:"ᵀ",
+  U:"ᵁ",V:"ⱽ",W:"ᵂ",X:"ˣ",
+  Y:"Y",Z:"Z"
+};
+
+const subLetters={
+  a:"ₐ",e:"ₑ",h:"ₕ",i:"ᵢ",
+  j:"ⱼ",k:"ₖ",l:"ₗ",m:"ₘ",
+  n:"ₙ",o:"ₒ",p:"ₚ",r:"ᵣ",
+  s:"ₛ",t:"ₜ",u:"ᵤ",v:"ᵥ",
+  x:"ₓ"
+};
+
+const superDigits=Array.from("⁰¹²³⁴⁵⁶⁷⁸⁹");
+const subDigits=Array.from("₀₁₂₃₄₅₆₇₈₉");
+
+const turned={
+  a:"ɐ",b:"q",c:"ɔ",d:"p",e:"ǝ",
+  f:"ɟ",g:"ƃ",h:"ɥ",i:"ᴉ",j:"ɾ",
+  k:"ʞ",l:"l",m:"ɯ",n:"u",o:"o",
+  p:"d",q:"b",r:"ɹ",s:"s",t:"ʇ",
+  u:"n",v:"ʌ",w:"ʍ",x:"x",y:"ʎ",z:"z"
+};
+
+/* ==========================================
+   TRANSFORMACIONES
+========================================== */
+
+function transformByRange(text,range,special={}) {
+  return Array.from(text).map(c=>{
+    if(special[c]) return special[c];
+
+    let p=upper.indexOf(c);
+    if(p!==-1) return String.fromCodePoint(range[0]+p);
+
+    p=lower.indexOf(c);
+    if(p!==-1) return String.fromCodePoint(range[1]+p);
+
+    p=digits.indexOf(c);
+    if(p!==-1 && range[2]!==null) {
+      return String.fromCodePoint(range[2]+p);
+    }
+
+    return c;
+  }).join("");
+}
+
+function transform(text,type) {
+  if(ranges[type]) {
+    return transformByRange(
+      text,ranges[type],exceptions[type]||{}
+    );
+  }
+
+  if(type==="small") {
+    return Array.from(text).map(c=>small[c.toLowerCase()]||c).join("");
+  }
+
+  if(type==="super" || type==="superCaps") {
+    return Array.from(text).map(c=>{
+      const p=digits.indexOf(c);
+      if(p!==-1) return superDigits[p];
+      return type==="superCaps"
+        ? (superCaps[c.toUpperCase()]||c)
+        : (superLetters[c.toLowerCase()]||c);
+    }).join("");
+  }
+
+  if(type==="sub") {
+    return Array.from(text).map(c=>{
+      const p=digits.indexOf(c);
+      if(p!==-1) return subDigits[p];
+      return subLetters[c.toLowerCase()]||c;
+    }).join("");
+  }
+
+  if(type==="fullwidth") {
+    return Array.from(text).map(c=>{
+      const n=c.charCodeAt(0);
+      return n>=33 && n<=126
+        ? String.fromCodePoint(n+0xFEE0)
+        : c;
+    }).join("");
+  }
+
+  if(type==="circled" || type==="negativeCircled" ||
+     type==="squared" || type==="negativeSquared") {
+
+    const starts={
+      circled:0x24B6,
+      negativeCircled:0x1F150,
+      squared:0x1F130,
+      negativeSquared:0x1F170
+    };
+
+    return Array.from(text).map(c=>{
+      const p=upper.indexOf(c.toUpperCase());
+      if(p!==-1) return String.fromCodePoint(starts[type]+p);
+      return c;
+    }).join("");
+  }
+
+  if(type==="turned") {
+    return Array.from(text).map(c=>turned[c.toLowerCase()]||c).join("");
+  }
+
+  if(type==="upsideDown") {
+    return Array.from(text).reverse()
+      .map(c=>turned[c.toLowerCase()]||c).join("");
+  }
+
+  if(type==="spaced") {
+    return Array.from(text).join(" ");
+  }
+
+  if(type==="wideSpaced") {
+    return Array.from(text).join("  ");
+  }
+
+  if(type==="compact") {
+    return text.replace(/ +/g,"");
+  }
+
+  if(type==="underline") {
+    return Array.from(text).map(c=>c===" " ? c : c+"\u0332").join("");
+  }
+
+  if(type==="doubleUnderline") {
+    return Array.from(text).map(c=>c===" " ? c : c+"\u0333").join("");
+  }
+
+  if(type==="strike") {
+    return Array.from(text).map(c=>c===" " ? c : c+"\u0336").join("");
+  }
+
+  return text;
+}
+
+/* ==========================================
+   ELEMENTOS
+========================================== */
+
+const input=document.getElementById("text");
+const results=document.getElementById("results");
+const search=document.getElementById("search");
+const count=document.getElementById("count");
+const counter=document.getElementById("counter");
+
+let filter="all";
+let favorites;
+
+try {
+  favorites=new Set(JSON.parse(
+    localStorage.getItem("chamukos_font_favorites")||"[]"
+  ));
+} catch(e) {
+  favorites=new Set();
+}
+
+/* ==========================================
+   COPIAR
+========================================== */
+
+async function copyText(text) {
+  if(navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const temp=document.createElement("textarea");
+  temp.value=text;
+  temp.style.position="fixed";
+  temp.style.left="-9999px";
+  document.body.appendChild(temp);
+  temp.select();
+
+  const ok=document.execCommand("copy");
+  temp.remove();
+
+  if(!ok) throw new Error("No se pudo copiar");
+}
+
+/* ==========================================
+   TARJETAS
+========================================== */
+
+function createCard(style,converted) {
+  const card=document.createElement("article");
+  card.className="card";
+
+  const top=document.createElement("div");
+  top.className="card-top";
+
+  const title=document.createElement("span");
+  title.className="card-name";
+  title.textContent=style.name;
+
+  const star=document.createElement("button");
+  star.className="star"+(favorites.has(style.type)?" saved":"");
+  star.textContent=favorites.has(style.type)?"★":"☆";
+
+  star.onclick=()=>{
+    if(favorites.has(style.type)) favorites.delete(style.type);
+    else favorites.add(style.type);
+
+    try {
+      localStorage.setItem(
+        "chamukos_font_favorites",
+        JSON.stringify([...favorites])
+      );
+    } catch(e) {}
+
+    render();
+  };
+
+  top.append(title,star);
+
+  const preview=document.createElement("div");
+  preview.className="preview";
+  preview.textContent=converted;
+
+  const copy=document.createElement("button");
+  copy.className="copy";
+  copy.textContent="Copiar texto";
+
+  copy.onclick=async()=>{
+    try {
+      await copyText(converted);
+      copy.textContent="¡Copiado!";
+      copy.classList.add("done");
+
+      setTimeout(()=>{
+        copy.textContent="Copiar texto";
+        copy.classList.remove("done");
+      },1600);
+    } catch(e) {
+      copy.textContent="Error al copiar";
+    }
+  };
+
+  card.append(top,preview,copy);
+  return card;
+}
+
+/* ==========================================
+   MOSTRAR 34 ESTILOS
+========================================== */
+
+function render() {
+  const value=input.value || "Tu texto aquí";
+  counter.textContent=input.value.length+" caracteres";
+
+  results.innerHTML="";
+  let total=0;
+
+  const query=search.value.toLowerCase().trim();
+
+  styles.forEach(style=>{
+    if(!style.name.toLowerCase().includes(query)) return;
+    if(filter==="fav" && !favorites.has(style.type)) return;
+
+    const converted=transform(value,style.type);
+    results.appendChild(createCard(style,converted));
+    total++;
+  });
+
+  count.textContent=total+" tipos de letras disponibles";
+
+  if(total===0) {
+    const empty=document.createElement("div");
+    empty.className="empty";
+    empty.textContent="No se encontraron tipos de letras.";
+    results.appendChild(empty);
+  }
+}
+
+/* ==========================================
+   EVENTOS
+========================================== */
+
+input.addEventListener("input",render);
+search.addEventListener("input",render);
+
+document.getElementById("clear").onclick=()=>{
+  input.value="";
+  input.focus();
+  render();
+};
+
+document.querySelectorAll(".filter").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".filter").forEach(b=>{
+      b.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+    filter=btn.dataset.filter;
+    render();
+  };
+});
+
+render();
+
+
+/* ================= ADMINISTRADOR CHAMUKOS CUP ================= */
+(function(){
+const KEY='chamukos_tournament_v1';
+const initial={teams:Array(8).fill(''),quarter:Array(4).fill(-1),semi:Array(2).fill(-1),final:-1,font:'bold',championCustom:''};
+let state;
+try { const saved=JSON.parse(localStorage.getItem(KEY));state={...initial,...saved};if(!Array.isArray(state.teams)||state.teams.length!==8)throw Error(); }catch(e){state=JSON.parse(JSON.stringify(initial));}
+const canvas=document.getElementById('bracket-canvas');
+const ctx=canvas.getContext('2d');
+const bg=new Image();
+bg.src='CHAMUKOS CUP Plantilla.png';
+const status=document.getElementById('tourney-status');
+bg.onload=()=>{status.textContent='Plantilla cargada correctamente.';draw();};
+bg.onerror=()=>{status.textContent='No se encontró CHAMUKOS CUP Plantilla.png. Ponla junto a index.html.';draw();};
+const $=id=>document.getElementById(id);
+const team=i=>state.teams[i].trim();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){} }
+function quarterWinner(i){let j=state.quarter[i];return j===0||j===1?team(i*2+j):'';}
+function semiWinner(i){let j=state.semi[i];return j===0||j===1?quarterWinner(i*2+j):'';}
+function champion(){return state.championCustom?.trim() || (state.final===0||state.final===1?semiWinner(state.final):'');}
+function match(container,id,names,selected,onPick){
+ const div=document.createElement('div');div.className='match-card';
+ const title=document.createElement('strong');title.textContent=id;div.appendChild(title);
+ names.forEach((name,j)=>{const b=document.createElement('button');b.textContent=name||'Por definir';b.disabled=!name;b.classList.toggle('selected',selected===j&&!!name);b.onclick=()=>onPick(j);div.appendChild(b);});container.appendChild(div);
+}
+function buildFields(){const fields=$('team-fields');fields.innerHTML='';for(let i=0;i<8;i++){
+ const div=document.createElement('div');div.className='team-field';const label=document.createElement('label');label.textContent='Equipo '+(i+1)+(i<4?' — lado izquierdo':' — lado derecho');
+ const field=document.createElement('input');field.type='text';field.maxLength=36;field.placeholder='Nombre del clan o team';field.value=state.teams[i];
+ field.addEventListener('input',()=>{state.teams[i]=field.value;state.quarter[Math.floor(i/2)]=-1;state.semi.fill(-1);state.final=-1;state.championCustom='';save();renderMatches();});div.append(label,field);fields.appendChild(div);
+}}
+function renderMatches(){
+ const q=$('quarter-matches'),s=$('semi-matches'),f=$('final-match');q.innerHTML='';s.innerHTML='';f.innerHTML='';
+ for(let i=0;i<4;i++)match(q,'Partido '+(i+1),[team(i*2),team(i*2+1)],state.quarter[i],j=>{state.quarter[i]=j;state.semi[Math.floor(i/2)]=-1;state.final=-1;state.championCustom='';save();renderMatches();});
+ for(let i=0;i<2;i++)match(s,'Semifinal '+(i+1),[quarterWinner(i*2),quarterWinner(i*2+1)],state.semi[i],j=>{state.semi[i]=j;state.final=-1;state.championCustom='';save();renderMatches();});
+ match(f,'Gran final',[semiWinner(0),semiWinner(1)],state.final,j=>{state.final=j;state.championCustom='';save();renderMatches();});
+ $('champion-name').textContent='🏆 Campeón: '+(champion()||'pendiente');$('champion-custom').value=state.championCustom||'';draw();
+}
+// Posiciones medidas en la imagen original de 1648 x 928.
+const slots={
+ teams:[[178,278],[178,402],[178,583],[178,708],[1470,278],[1470,402],[1470,583],[1470,708]],
+ quarter:[[493,418],[493,574],[1152,418],[1152,574]],
+ semi:[[824,531],[824,531]],champion:[825,793]
+};
+// La plantilla tiene cuatro cajas intermedias (dos a cada lado) y una caja central.
+// Cada caja intermedia muestra al ganador del partido de cuartos correspondiente.
+// La caja central muestra a los dos finalistas separados por VS hasta elegir campeón.
+function write(text,x,y,maxWidth,baseSize=29,gold=false){
+ if(!text)return;let size=baseSize;
+ ctx.font=`900 ${size}px ${state.font==='serif'?'Georgia':state.font==='italic'?'Arial':'Arial'}`;
+ while(ctx.measureText(text).width>maxWidth&&size>13){size-=1;ctx.font=`${state.font==='italic'?'italic ':''}900 ${size}px ${state.font==='serif'?'Georgia':'Arial'}`;}
+ ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=gold?'#fff2b5':'#ffffff';ctx.shadowColor='#000';ctx.shadowBlur=6;ctx.lineWidth=3;ctx.strokeStyle='#000';ctx.strokeText(text,x,y,maxWidth);ctx.fillText(text,x,y,maxWidth);ctx.shadowBlur=0;
+}
+function draw(){
+ ctx.clearRect(0,0,1648,928);
+ if(bg.complete&&bg.naturalWidth)ctx.drawImage(bg,0,0,1648,928);
+ else {ctx.fillStyle='#061020';ctx.fillRect(0,0,1648,928);ctx.fillStyle='#70d9ff';ctx.font='bold 48px Arial';ctx.textAlign='center';ctx.fillText('CHAMUKOS CUP',824,180);}
+ state.teams.forEach((n,i)=>write(n.trim(),...slots.teams[i],222,26));
+ // Four quarter winners occupy the four side boxes.
+ const side=[[493,418],[493,574],[1152,418],[1152,574]];
+ for(let i=0;i<4;i++)write(quarterWinner(i),...side[i],205,25);
+ const left=semiWinner(0),right=semiWinner(1);
+ const finalText=left&&right?(left+'  VS  '+right):(left||right);
+ write(finalText,824,532,250,22);
+ write(champion(),...slots.champion,388,35,true);
+}
+$('champion-custom').addEventListener('input',e=>{state.championCustom=e.target.value;save();$('champion-name').textContent='🏆 Campeón: '+(champion()||'pendiente');draw();});
+$('bracket-font').value=state.font;
+$('bracket-font').addEventListener('change',e=>{state.font=e.target.value;save();draw();});
+$('download-bracket').addEventListener('click',()=>{
+ if(!bg.complete||!bg.naturalWidth){status.textContent='Primero coloca CHAMUKOS CUP Plantilla.png en la carpeta de la web.';return;}
+ try {
+  draw();
+  // toBlob + URL temporal evita problemas con enlaces data: muy largos.
+  canvas.toBlob(blob=>{
+   if(!blob){status.textContent='No se pudo crear el PNG. Intenta abrir la web desde un servidor local.';return;}
+   const url=URL.createObjectURL(blob);
+   const a=document.createElement('a');
+   a.href=url;a.download='CHAMUKOS-CUP-TORNEO.png';
+   a.style.display='none';document.body.appendChild(a);
+   a.click();
+   status.textContent='Descarga solicitada. Revisa las descargas de Brave (Ctrl + J).';
+   setTimeout(()=>{a.remove();URL.revokeObjectURL(url);},60000);
+  },'image/png');
+ } catch(error){
+  console.error('Error al exportar torneo:',error);
+  status.textContent='Error al descargar: '+error.message+'. Abre la consola (F12) si continúa.';
+ }
+});
+$('reset-bracket').addEventListener('click',()=>{if(!confirm('¿Borrar los 8 equipos y todos los resultados?'))return;state=JSON.parse(JSON.stringify(initial));save();buildFields();renderMatches();});
+document.querySelectorAll('.nav-tab').forEach(btn=>btn.addEventListener('click',()=>{
+ document.querySelectorAll('.nav-tab').forEach(b=>b.classList.toggle('active',b===btn));
+ const tournament=btn.dataset.view==='tournament';$('fonts-view').classList.toggle('hidden',tournament);$('tournament-view').classList.toggle('active',tournament);
+ if(tournament)draw();window.scrollTo({top:0,behavior:'smooth'});
+}));
+buildFields();renderMatches();
+})();
+
+</script>
+
+
+<script>
+/* Acceso visual local. Para seguridad real, usar autenticación en servidor. */
+(function(){
+ const screen=document.getElementById('login-screen');
+ const error=document.getElementById('login-error');
+ const user=document.getElementById('login-user');
+ const pass=document.getElementById('login-pass');
+ const key='chamukos_login_session';
+ function unlock(){screen.classList.add('is-hidden');document.body.classList.remove('login-locked');window.scrollTo(0,0);}
+ if(sessionStorage.getItem(key)==='yes')unlock();
+ document.getElementById('login-form').addEventListener('submit',function(e){
+  e.preventDefault();
+  if(user.value.trim()==='Chamukos' && pass.value==='V2'){
+   sessionStorage.setItem(key,'yes');error.textContent='';pass.value='';unlock();
+  }else{error.textContent='Usuario o contraseña incorrectos';pass.value='';pass.focus();}
+ });
+ document.getElementById('login-eye').addEventListener('click',function(){pass.type=pass.type==='password'?'text':'password';this.setAttribute('aria-label',pass.type==='password'?'Mostrar contraseña':'Ocultar contraseña');});
+ document.getElementById('logout-btn').addEventListener('click',function(){sessionStorage.removeItem(key);user.value='';pass.value='';document.body.classList.add('login-locked');screen.classList.remove('is-hidden');user.focus();window.scrollTo(0,0);});
+})();
+</script>
+
+</body>
+</html>
